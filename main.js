@@ -1,8 +1,8 @@
 import * as THREE from "https://www.unpkg.com/three@0.160.1/build/three.module.js";
 
 // サイズを指定
-const width = 960;
-const height = 540;
+const width = 480;
+const height = 320;
 
 // レンダラーを作成
 const renderer = new THREE.WebGLRenderer({
