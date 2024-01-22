@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from "https://www.unpkg.com/three@0.160.1/build/three.module.js";
 
 // サイズを指定
 const width = 960;
@@ -28,8 +28,8 @@ tick();
 
 // 毎フレーム時に実行されるループイベントです
 function tick() {
-  box.rotation.x += 0.03;
-  box.rotation.y += 0.03;
+  box.rotation.x += 0.01;
+  box.rotation.y += 0.01;
   renderer.render(scene, camera); // レンダリング
 
   requestAnimationFrame(tick);
