@@ -1,36 +1,66 @@
 import * as THREE from "https://www.unpkg.com/three@0.160.1/build/three.module.js";
 
-// サイズを指定
-const width = 480;
-const height = 320;
+const mainContainer = {
+  element: null,
+  width: 320,
+  height: 480,
+};
 
-// レンダラーを作成
-const renderer = new THREE.WebGLRenderer({
-  canvas: document.querySelector("#myCanvas"),
-});
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(width, height);
+const width = 320;
+const height = 480;
 
-// シーンを作成
-const scene = new THREE.Scene();
+let canvas = null;
+let renderer = null;
+let scene = null;
+let camera = null;
+let box = null;
 
-// カメラを作成
-const camera = new THREE.PerspectiveCamera(45, width / height);
-camera.position.set(0, 0, +1000);
+const init = () => {
+  mainContainer.element = document.getElementById("main-container");
+  mainContainer.element.style.position = "relative";
+  mainContainer.element.style.width = mainContainer.width + "px";
+  mainContainer.element.style.height = mainContainer.height + "px";
+  mainContainer.element.style.display = "flex";
+  mainContainer.element.style.alignItems = "center";
+  mainContainer.element.style.justifyContent = "center";
+  mainContainer.element.style.flexDirection = "column";
+  mainContainer.element.style.overflow = "hidden";
+  mainContainer.element.style.userSelect = "none";
+  mainContainer.element.style.webkitUserSelect = "none";
 
-// 箱を作成
-const geometry = new THREE.BoxGeometry(400, 400, 400);
-const material = new THREE.MeshNormalMaterial();
-const box = new THREE.Mesh(geometry, material);
-scene.add(box);
+  canvas = document.createElement("canvas");
+  mainContainer.element.appendChild(canvas);
 
-tick();
+  // レンダラーを作成
+  renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+  });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(width, height);
 
-// 毎フレーム時に実行されるループイベントです
-function tick() {
+  // シーンを作成
+  scene = new THREE.Scene();
+
+  // カメラを作成
+  camera = new THREE.PerspectiveCamera(45, width / height);
+  camera.position.set(0, 0, +1000);
+
+  // 箱を作成
+  const geometry = new THREE.BoxGeometry(200, 200, 400);
+  const material = new THREE.MeshNormalMaterial();
+  box = new THREE.Mesh(geometry, material);
+  scene.add(box);
+};
+
+const tick = () => {
   box.rotation.x += 0.01;
   box.rotation.y += 0.01;
   renderer.render(scene, camera); // レンダリング
 
   requestAnimationFrame(tick);
-}
+};
+
+window.onload = () => {
+  init();
+  tick();
+};
