@@ -18,6 +18,8 @@ let camera = null;
 let box = null;
 let isDrawStart = false;
 
+let plane;
+
 const init = () => {
   mainContainer.element = document.getElementById("main-container");
   mainContainer.element.style.position = "relative";
@@ -71,7 +73,19 @@ const init = () => {
   const geometry = new THREE.BoxGeometry(200, 400, 200);
   const material = new THREE.MeshLambertMaterial({ color: 0xcd853f });
   box = new THREE.Mesh(geometry, material);
-  scene.add(box);
+  //scene.add(box);
+
+  initPaper();
+};
+
+const initPaper = () => {
+  const geometry = new THREE.PlaneGeometry(300, 200, 1, 1);
+  const material = new THREE.MeshLambertMaterial({
+    color: 0xffffff,
+  });
+  plane = new THREE.Mesh(geometry, material);
+  plane.rotation.x = -0.5;
+  scene.add(plane);
 };
 
 const tick = () => {
