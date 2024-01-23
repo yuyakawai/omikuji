@@ -45,14 +45,17 @@ const init = () => {
   camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height);
   camera.position.set(0, 0, 1000);
 
+  const directionalLight = new THREE.DirectionalLight(0xffffff);
+  directionalLight.position.set(0, 0, 1);
+  scene.add(directionalLight);
+
   const geometry = new THREE.BoxGeometry(200, 400, 200);
-  const material = new THREE.MeshNormalMaterial();
+  const material = new THREE.MeshLambertMaterial({ color: 0xa63744 });
   box = new THREE.Mesh(geometry, material);
   scene.add(box);
 };
 
 const tick = () => {
-  //box.rotation.x += 0.01;
   box.rotation.y += 0.01;
   renderer.render(scene, camera);
 
