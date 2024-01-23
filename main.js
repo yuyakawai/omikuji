@@ -16,6 +16,7 @@ let renderer = null;
 let scene = null;
 let camera = null;
 let box = null;
+let isDrawStart = false;
 
 const init = () => {
   mainContainer.element = document.getElementById("main-container");
@@ -32,7 +33,25 @@ const init = () => {
   mainContainer.element.style.webkitUserSelect = "none";
 
   canvas.element = document.createElement("canvas");
+  canvas.element.style.cursor = "pointer";
   mainContainer.element.appendChild(canvas.element);
+
+  const handleButtonDown = (e) => {
+    e.preventDefault();
+    isDrawStart = true;
+  };
+
+  const handleButtonUp = (e) => {
+    e.preventDefault();
+  };
+
+  if (window.ontouchstart === null) {
+    canvas.element.ontouchstart = handleButtonDown;
+    canvas.element.ontouchend = handleButtonUp;
+  } else {
+    canvas.element.onpointerdown = handleButtonDown;
+    canvas.element.onpointerup = handleButtonUp;
+  }
 
   renderer = new THREE.WebGLRenderer({
     canvas: canvas.element,
@@ -50,13 +69,17 @@ const init = () => {
   scene.add(directionalLight);
 
   const geometry = new THREE.BoxGeometry(200, 400, 200);
-  const material = new THREE.MeshLambertMaterial({ color: 0xa63744 });
+  const material = new THREE.MeshLambertMaterial({ color: 0xcd853f });
   box = new THREE.Mesh(geometry, material);
   scene.add(box);
 };
 
 const tick = () => {
-  box.rotation.y += 0.01;
+  if (isDrawStart) {
+    box.position.y += 3.5;
+  } else {
+    box.rotation.y += 0.01;
+  }
   renderer.render(scene, camera);
 
   requestAnimationFrame(tick);
