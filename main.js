@@ -40,24 +40,21 @@ const init = () => {
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(canvas.width, canvas.height);
 
-  // シーンを作成
   scene = new THREE.Scene();
 
-  // カメラを作成
   camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height);
-  camera.position.set(0, 0, +1000);
+  camera.position.set(0, 0, 1000);
 
-  // 箱を作成
-  const geometry = new THREE.BoxGeometry(200, 200, 400);
+  const geometry = new THREE.BoxGeometry(200, 400, 200);
   const material = new THREE.MeshNormalMaterial();
   box = new THREE.Mesh(geometry, material);
   scene.add(box);
 };
 
 const tick = () => {
-  box.rotation.x += 0.01;
+  //box.rotation.x += 0.01;
   box.rotation.y += 0.01;
-  renderer.render(scene, camera); // レンダリング
+  renderer.render(scene, camera);
 
   requestAnimationFrame(tick);
 };
