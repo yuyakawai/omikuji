@@ -6,10 +6,12 @@ const mainContainer = {
   height: 480,
 };
 
-const width = 320;
-const height = 480;
+const canvas = {
+  element: null,
+  width: 320,
+  height: 480,
+};
 
-let canvas = null;
 let renderer = null;
 let scene = null;
 let camera = null;
@@ -18,6 +20,7 @@ let box = null;
 const init = () => {
   mainContainer.element = document.getElementById("main-container");
   mainContainer.element.style.position = "relative";
+  mainContainer.element.style.margin = "5px";
   mainContainer.element.style.width = mainContainer.width + "px";
   mainContainer.element.style.height = mainContainer.height + "px";
   mainContainer.element.style.display = "flex";
@@ -28,21 +31,20 @@ const init = () => {
   mainContainer.element.style.userSelect = "none";
   mainContainer.element.style.webkitUserSelect = "none";
 
-  canvas = document.createElement("canvas");
-  mainContainer.element.appendChild(canvas);
+  canvas.element = document.createElement("canvas");
+  mainContainer.element.appendChild(canvas.element);
 
-  // レンダラーを作成
   renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
+    canvas: canvas.element,
   });
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(width, height);
+  renderer.setSize(canvas.width, canvas.height);
 
   // シーンを作成
   scene = new THREE.Scene();
 
   // カメラを作成
-  camera = new THREE.PerspectiveCamera(45, width / height);
+  camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height);
   camera.position.set(0, 0, +1000);
 
   // 箱を作成
