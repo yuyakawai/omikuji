@@ -70,12 +70,15 @@ const init = () => {
   directionalLight.position.set(0, 0, 1);
   scene.add(directionalLight);
 
+  initBox();
+  //initPaper();
+};
+
+const initBox = () => {
   const geometry = new THREE.BoxGeometry(200, 400, 200);
   const material = new THREE.MeshLambertMaterial({ color: 0xcd853f });
   box = new THREE.Mesh(geometry, material);
-  //scene.add(box);
-
-  initPaper();
+  scene.add(box);
 };
 
 const initPaper = () => {
