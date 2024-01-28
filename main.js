@@ -16,9 +16,8 @@ let renderer = null;
 let scene = null;
 let camera = null;
 let box = null;
+let rod;
 let isDrawStart = false;
-
-let plane;
 
 const init = () => {
   mainContainer.element = document.getElementById("main-container");
@@ -71,7 +70,7 @@ const init = () => {
   scene.add(directionalLight);
 
   initBox();
-  //initPaper();
+  initRod();
 };
 
 const initBox = () => {
@@ -81,19 +80,70 @@ const initBox = () => {
   scene.add(box);
 };
 
-const initPaper = () => {
-  const geometry = new THREE.PlaneGeometry(300, 200, 1, 1);
+const initRod = () => {
+  let texture = createTexture({
+    text: "at",
+    fontSize: 1200,
+  });
+  const geometry = new THREE.BoxGeometry(150, 400, 10);
   const material = new THREE.MeshLambertMaterial({
     color: 0xffffff,
+    map: texture,
   });
-  plane = new THREE.Mesh(geometry, material);
-  plane.rotation.x = -0.5;
-  scene.add(plane);
+
+  rod = new THREE.Mesh(geometry, material);
+
+  scene.add(rod);
+};
+
+const createTexture = (options) => {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  // measureTextするためいったん設定
+  const fontFamily = "sans-serif";
+  ctx.font = `${options.fontSize}px '${fontFamily}'`;
+  const textWidth = ctx.measureText(options.text); // 文字の横幅を取得
+
+  // dprに対応したサイズを計算
+  const width = textWidth.width;
+  const height = options.fontSize * 0.8; // 文字に合わせて高さを調整。ここの高さは任意で
+  // 幅を指定
+  canvas.width = width;
+  canvas.height = height;
+
+  // 中央にテキストを描画
+  ctx.font = `${options.fontSize}px '${fontFamily}'`;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "hanging";
+  ctx.fillStyle = "#cd853f";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "black";
+  ctx.fillText(options.text, -5, 0); // 文字が途切れないように調整。数値はよしなに
+
+  // ↓canvasの文字を確認したいとき。テキストを描画したcanvasをbodyに追加しているだけです。
+  // document.body.appendChild(canvas);
+  // canvas.style.backgroundColor = '#933';
+  // canvas.style.position = 'relative';
+
+  // テクスチャを作成
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = false;
+  // ↓ここら辺の設定をしておかないとthree.jsでエラーが出る時がある
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.format = THREE.RGBAFormat;
+
+  return texture;
 };
 
 const tick = () => {
   if (isDrawStart) {
     box.position.y += 3.5;
+    camera.position.z -= 2.0;
+    if (camera.position.z < 600) {
+      return;
+    }
   } else {
     box.rotation.y += 0.01;
   }
