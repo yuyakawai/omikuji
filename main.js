@@ -158,8 +158,8 @@ const tick = () => {
   } else {
     box.rotation.y += 0.01;
   }
-  renderer.render(scene, camera);
 
+  renderer.render(scene, camera);
   requestAnimationFrame(tick);
 };
 
