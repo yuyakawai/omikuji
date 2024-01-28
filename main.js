@@ -88,7 +88,7 @@ const initRod = () => {
   const texture = createTexture(
     fortuneList[Math.floor(Math.random() * fortuneList.length)]
   );
-  const geometry = new THREE.BoxGeometry(50, 400, 10);
+  const geometry = new THREE.BoxGeometry(50, 400, 7);
   const material = new THREE.MeshLambertMaterial({
     color: 0xffffff,
     map: texture,
@@ -108,7 +108,7 @@ const createTexture = (text) => {
   canvas.width = width;
   canvas.height = height;
 
-  ctx.font = "150px sans-serif";
+  ctx.font = "135px sans-serif";
   ctx.textAlign = "left";
   ctx.fillStyle = "#cd853f";
   ctx.textAlign = "center";
@@ -117,7 +117,7 @@ const createTexture = (text) => {
   ctx.fillStyle = "black";
 
   text.split("").forEach((str, index) => {
-    ctx.fillText(str, canvas.width / 2, canvas.height / 2 + index * 150);
+    ctx.fillText(str, canvas.width / 2, canvas.height * 0.6 + index * 150);
   });
   const texture = new THREE.CanvasTexture(canvas);
   texture.needsUpdate = false;
