@@ -12,6 +12,8 @@ const canvas = {
   height: 480,
 };
 
+const fortuneList = ["大吉", "中吉", "小吉", "吉", "凶", "大凶"];
+
 let renderer = null;
 let scene = null;
 let camera = null;
@@ -75,17 +77,18 @@ const init = () => {
 
 const initBox = () => {
   const geometry = new THREE.BoxGeometry(200, 400, 200);
-  const material = new THREE.MeshLambertMaterial({ color: 0xcd853f });
+  const material = new THREE.MeshLambertMaterial({
+    color: 0xcd853f,
+  });
   box = new THREE.Mesh(geometry, material);
   scene.add(box);
 };
 
 const initRod = () => {
-  let texture = createTexture({
-    text: "at",
-    fontSize: 1200,
-  });
-  const geometry = new THREE.BoxGeometry(150, 400, 10);
+  const texture = createTexture(
+    fortuneList[Math.floor(Math.random() * fortuneList.length)]
+  );
+  const geometry = new THREE.BoxGeometry(50, 400, 10);
   const material = new THREE.MeshLambertMaterial({
     color: 0xffffff,
     map: texture,
@@ -96,43 +99,28 @@ const initRod = () => {
   scene.add(rod);
 };
 
-const createTexture = (options) => {
+const createTexture = (text) => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
-  // measureTextするためいったん設定
-  const fontFamily = "sans-serif";
-  ctx.font = `${options.fontSize}px '${fontFamily}'`;
-  const textWidth = ctx.measureText(options.text); // 文字の横幅を取得
-
-  // dprに対応したサイズを計算
-  const width = textWidth.width;
-  const height = options.fontSize * 0.8; // 文字に合わせて高さを調整。ここの高さは任意で
-  // 幅を指定
+  const width = 150;
+  const height = 1050;
   canvas.width = width;
   canvas.height = height;
 
-  // 中央にテキストを描画
-  ctx.font = `${options.fontSize}px '${fontFamily}'`;
+  ctx.font = "150px sans-serif";
   ctx.textAlign = "left";
-  ctx.textBaseline = "hanging";
   ctx.fillStyle = "#cd853f";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "black";
-  ctx.fillText(options.text, -5, 0); // 文字が途切れないように調整。数値はよしなに
 
-  // ↓canvasの文字を確認したいとき。テキストを描画したcanvasをbodyに追加しているだけです。
-  // document.body.appendChild(canvas);
-  // canvas.style.backgroundColor = '#933';
-  // canvas.style.position = 'relative';
-
-  // テクスチャを作成
+  text.split("").forEach((str, index) => {
+    ctx.fillText(str, canvas.width / 2, canvas.height / 2 + index * 150);
+  });
   const texture = new THREE.CanvasTexture(canvas);
   texture.needsUpdate = false;
-  // ↓ここら辺の設定をしておかないとthree.jsでエラーが出る時がある
-  texture.minFilter = THREE.LinearFilter;
-  texture.magFilter = THREE.LinearFilter;
-  texture.format = THREE.RGBAFormat;
 
   return texture;
 };
