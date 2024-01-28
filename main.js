@@ -6,6 +6,12 @@ const mainContainer = {
   height: 480,
 };
 
+const description = {
+  element: null,
+  width: 320,
+  height: 80,
+};
+
 const canvas = {
   element: null,
   width: 320,
@@ -34,6 +40,22 @@ const init = () => {
   mainContainer.element.style.overflow = "hidden";
   mainContainer.element.style.userSelect = "none";
   mainContainer.element.style.webkitUserSelect = "none";
+
+  description.element = document.createElement("div");
+  description.element.style.position = "absolute";
+  description.element.style.top = "0px";
+  description.element.style.left = "0px";
+  description.element.style.width = description.width + "px";
+  description.element.style.height = description.height + "px";
+  description.element.style.display = "flex";
+  description.element.style.alignItems = "center";
+  description.element.style.justifyContent = "center";
+  description.element.style.flexDirection = "column";
+  description.element.style.fontSize = "22px";
+  description.element.style.backgroundColor = "transparent";
+  description.element.style.color = "white";
+  description.element.textContent = "画面を押しておみくじを引く";
+  mainContainer.element.appendChild(description.element);
 
   canvas.element = document.createElement("canvas");
   canvas.element.style.cursor = "pointer";
@@ -127,6 +149,7 @@ const createTexture = (text) => {
 
 const tick = () => {
   if (isDrawStart) {
+    description.element.style.display = "none";
     box.position.y += 3.5;
     camera.position.z -= 2.0;
     if (camera.position.z < 600) {
